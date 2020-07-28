@@ -7,6 +7,7 @@ const client = new Discord.Client(); // create a new discord client
 client.commands = new Discord.Collection(); // create a collection of the client commands
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js')); // returns an array of all the files within the ./commands directory
 
+// iterate through array of commandFiles and set them into the client.commands collection
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
@@ -29,7 +30,17 @@ client.on('message', message => {
     // command variable takes first element in args array and return it while removing it from array
     const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
-        
+
+    // check if command exists in client.commands collection
+    // then attempt to execute command. Return error message if any
+    if (!client.commands.has(command)) 
+        return;
+    try {
+        client.commands.get(command).execute(message, args);
+    } catch (error) {
+        console.log(error);
+        message.reply('There was an error when attempting to execute the command');
+    }
 });
 
 

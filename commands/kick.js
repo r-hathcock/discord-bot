@@ -1,6 +1,6 @@
 module.exports = {
-    name: 'args-info',
-    description: 'Display argument info',
+    name: 'kick',
+    description: '',
     execute(message, args) {
         // message.mentions.users is a collection with a size
         // if there are no users in the collection, size === 0 and error message is returned
